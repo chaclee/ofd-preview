@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>OFD 文件预览</title>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width"/>
+</head>
+<body>
+<h3>OFD 文件在线预览</h3>
+<!--
+  重要提示：
+  如果提示 Maximum call stack size exceeded 请拷贝 右侧 浏览器中地址 并在chrome中访问即可。
+ -->
+
+<input
+        type="file"
+        ref="file"
+        class="hidden"
+        accept=".ofd"
+        onchange="ofdFile(event)"
+/>
+<div
+        class="ofdContainer"
+        id="ofdContainer"
+        style="width: 100%; height: 800px"
+></div>
+</body>
+<script src="./ofd.umd.js"></script>
+<script>
+    function ofdFile(e) {
+        const file = e.target.files[0];
+        ofd.parseOfdDocument({
+            ofd: file,
+            success: function (res) {
+                const screenWidth = 800;
+                const ofdRenderRes = ofd.renderOfd(screenWidth, res[0]);
+                let ofdContainerDiv = document.getElementById('ofdContainer');
+                // 清空元素
+                ofdContainerDiv.innerHTML = '';
+                for (const item of ofdRenderRes) {
+                    ofdContainerDiv.appendChild(item);
+                }
+            },
+            fail: function (err) {
+                console.error(err);
+            },
+        });
+    }
+</script>
+</html>
