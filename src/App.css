@@ -1,16 +1,35 @@
+/* CSS Variables for theming */
+:root {
+  --primary: #2c3e50;
+  --secondary: #34495e;
+  --accent: #7f8c8d;
+  --background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  --headerBg: rgba(255, 255, 255, 0.5);
+  --uploadBorder: rgba(44, 62, 80, 0.3);
+  --uploadBorderHover: #2c3e50;
+  --uploadBg: rgba(255, 255, 255, 0.95);
+  --uploadBgHover: #ffffff;
+  --iconColor: #2c3e50;
+  --cardShadow: rgba(0, 0, 0, 0.08);
+  --scrollbarThumb: #7f8c8d;
+  --scrollbarThumbHover: #5a6c7d;
+}
+
 .layout {
   min-height: 100vh;
-  background: linear-gradient(135deg, #ff6b6b 0%, #ff8e53 50%, #feca57 100%);
+  background: var(--background);
+  transition: background 0.3s ease;
 }
 
 .header {
   display: flex;
   align-items: center;
-  background: rgba(0, 0, 0, 0.25);
+  background: var(--headerBg);
   backdrop-filter: blur(20px);
-  box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 20px var(--cardShadow);
   padding: 0 32px;
   height: 64px;
+  transition: all 0.3s ease;
 }
 
 .header-content {
@@ -20,6 +39,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 24px;
 }
 
 .logo {
@@ -27,6 +47,22 @@
   align-items: center;
   gap: 12px;
   color: white;
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.theme-switcher {
+  display: flex;
+  align-items: center;
+  padding: 8px 16px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  backdrop-filter: blur(10px);
 }
 
 .header-file-info {
@@ -65,24 +101,24 @@
 .upload-dragger {
   max-width: 600px;
   width: 100%;
-  background: rgba(255, 255, 255, 0.95) !important;
-  border: 3px dashed rgba(255, 107, 107, 0.3) !important;
+  background: var(--uploadBg) !important;
+  border: 3px dashed var(--uploadBorder) !important;
   border-radius: 16px !important;
   padding: 48px 24px !important;
   transition: all 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 8px 32px var(--cardShadow);
 }
 
 .upload-dragger:hover {
-  border-color: #ff6b6b !important;
-  background: white !important;
+  border-color: var(--uploadBorderHover) !important;
+  background: var(--uploadBgHover) !important;
   transform: translateY(-4px);
-  box-shadow: 0 12px 48px rgba(255, 107, 107, 0.2);
+  box-shadow: 0 12px 48px var(--cardShadow);
 }
 
 .ant-upload-drag-icon {
   font-size: 64px;
-  color: #ff6b6b;
+  color: var(--iconColor);
   margin-bottom: 16px;
 }
 
@@ -103,9 +139,10 @@
   flex: 1;
   height: 100%;
   border-radius: 16px;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 8px 32px var(--cardShadow);
   overflow: hidden;
   background: white;
+  transition: box-shadow 0.3s ease;
 }
 
 .ofd-container {
@@ -169,10 +206,47 @@
 }
 
 .ofd-container::-webkit-scrollbar-thumb {
-  background: #ff6b6b;
+  background: var(--scrollbarThumb);
   border-radius: 4px;
+  transition: background 0.3s ease;
 }
 
 .ofd-container::-webkit-scrollbar-thumb:hover {
-  background: #ff5252;
+  background: var(--scrollbarThumbHover);
+}
+
+/* Dark mode adaptations */
+.layout[data-theme-dark="true"] .ant-upload-text {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.layout[data-theme-dark="true"] .ant-upload-hint {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.layout[data-theme-dark="true"] .preview-card {
+  background: rgba(30, 41, 59, 0.8);
+}
+
+.layout[data-theme-dark="true"] .ofd-container {
+  background: rgba(15, 23, 42, 0.6);
+}
+
+/* Segmented control styling */
+.ant-segmented {
+  background: transparent !important;
+}
+
+.ant-segmented-item {
+  color: rgba(255, 255, 255, 0.8) !important;
+  transition: all 0.3s ease;
+}
+
+.ant-segmented-item:hover {
+  color: white !important;
+}
+
+.ant-segmented-item-selected {
+  background: rgba(255, 255, 255, 0.3) !important;
+  color: white !important;
 }

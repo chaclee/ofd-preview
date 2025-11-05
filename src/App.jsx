@@ -1,16 +1,35 @@
-import React, { useState, useRef } from 'react'
-import { Layout, Card, Upload, Button, Typography, Space, message, Spin } from 'antd'
-import { InboxOutlined, FileTextOutlined, ReloadOutlined } from '@ant-design/icons'
+import React, { useState, useRef, useEffect } from 'react'
+import { Layout, Card, Upload, Button, Typography, Space, message, Spin, Segmented } from 'antd'
+import { InboxOutlined, FileTextOutlined, ReloadOutlined, BgColorsOutlined } from '@ant-design/icons'
+import { themes, getTheme } from './themes'
 import './App.css'
 
-const { Header, Content, Footer } = Layout
+const { Header, Content } = Layout
 const { Title, Text } = Typography
 const { Dragger } = Upload
 
 function App() {
   const [loading, setLoading] = useState(false)
   const [fileName, setFileName] = useState('')
+  const [currentTheme, setCurrentTheme] = useState(() => {
+    return localStorage.getItem('ofd-theme') || 'minimal'
+  })
   const containerRef = useRef(null)
+
+  const theme = getTheme(currentTheme)
+
+  // 保存主题选择到 localStorage
+  useEffect(() => {
+    localStorage.setItem('ofd-theme', currentTheme)
+  }, [currentTheme])
+
+  // 应用主题 CSS 变量
+  useEffect(() => {
+    const root = document.documentElement
+    Object.entries(theme.colors).forEach(([key, value]) => {
+      root.style.setProperty(`--${key}`, value)
+    })
+  }, [theme])
 
   const handleFileChange = async (info) => {
     const { file } = info
@@ -87,8 +106,19 @@ function App() {
     onChange: handleFileChange,
   }
 
+  // 主题选项
+  const themeOptions = Object.entries(themes).map(([key, value]) => ({
+    label: (
+      <div style={{ padding: '4px 0' }}>
+        <div style={{ fontWeight: 500 }}>{value.name}</div>
+        <div style={{ fontSize: '12px', opacity: 0.7 }}>{value.description}</div>
+      </div>
+    ),
+    value: key
+  }))
+
   return (
-    <Layout className="layout">
+    <Layout className="layout" data-theme-dark={theme.colors.isDark ? 'true' : 'false'}>
       <Header className="header">
         <div className="header-content">
           <div className="logo">
@@ -98,25 +128,37 @@ function App() {
             </Title>
           </div>
 
-          {fileName && (
-            <div className="header-file-info">
-              <Text style={{ color: 'rgba(255, 255, 255, 0.85)', marginRight: '8px' }}>
-                {fileName}
-              </Text>
-              <Button
-                size="small"
-                icon={<ReloadOutlined />}
-                onClick={handleReset}
-                style={{
-                  background: 'rgba(255, 255, 255, 0.2)',
-                  border: 'none',
-                  color: 'white'
-                }}
-              >
-                重置
-              </Button>
+          <div className="header-actions">
+            <div className="theme-switcher">
+              <BgColorsOutlined style={{ fontSize: '18px', color: 'white', marginRight: '12px' }} />
+              <Segmented
+                options={themeOptions}
+                value={currentTheme}
+                onChange={setCurrentTheme}
+                style={{ background: 'rgba(255, 255, 255, 0.2)' }}
+              />
             </div>
-          )}
+
+            {fileName && (
+              <div className="header-file-info">
+                <Text style={{ color: 'rgba(255, 255, 255, 0.85)', marginRight: '8px' }}>
+                  {fileName}
+                </Text>
+                <Button
+                  size="small"
+                  icon={<ReloadOutlined />}
+                  onClick={handleReset}
+                  style={{
+                    background: 'rgba(255, 255, 255, 0.2)',
+                    border: 'none',
+                    color: 'white'
+                  }}
+                >
+                  重置
+                </Button>
+              </div>
+            )}
+          </div>
         </div>
       </Header>
 
