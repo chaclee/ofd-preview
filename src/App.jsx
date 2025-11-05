@@ -15,38 +15,59 @@ function App() {
   const handleFileChange = async (info) => {
     const { file } = info
 
-    if (file.status === 'uploading') {
+    // Get the actual file object
+    const actualFile = file.originFileObj || file
+
+    // Skip if file is not ready
+    if (!actualFile || file.status === 'uploading') {
       return
     }
 
     setLoading(true)
-    setFileName(file.name)
+    setFileName(actualFile.name || file.name)
 
     try {
-      const arrayBuffer = await file.originFileObj.arrayBuffer()
-
-      // Clear previous content
-      if (containerRef.current) {
-        containerRef.current.innerHTML = ''
-      }
-
-      // Parse and render OFD document using the global ofd library
-      if (window.ofd && window.ofd.renderOfd) {
-        await window.ofd.renderOfd(arrayBuffer, {
-          element: containerRef.current
-        })
-        message.success(`${file.name} 加载成功！`)
-      } else {
+      // Use the OFD library API as in the original code
+      if (!window.ofd || !window.ofd.parseOfdDocument) {
         throw new Error('OFD 库未加载')
       }
+
+      window.ofd.parseOfdDocument({
+        ofd: actualFile,
+        success: function (res) {
+          try {
+            const screenWidth = 800
+            const ofdRenderRes = window.ofd.renderOfd(screenWidth, res[0])
+
+            // Clear previous content
+            if (containerRef.current) {
+              containerRef.current.innerHTML = ''
+
+              // Append all rendered elements
+              for (const item of ofdRenderRes) {
+                containerRef.current.appendChild(item)
+              }
+            }
+
+            message.success(`${actualFile.name || file.name} 加载成功！`)
+          } catch (error) {
+            console.error('Error rendering OFD:', error)
+            message.error(`渲染失败: ${error.message}`)
+          } finally {
+            setLoading(false)
+          }
+        },
+        fail: function (err) {
+          console.error('Error parsing OFD:', err)
+          message.error(`解析失败: ${err.message || '未知错误'}`)
+          setLoading(false)
+        }
+      })
     } catch (error) {
       console.error('Error loading OFD file:', error)
       message.error(`加载失败: ${error.message}`)
-    } finally {
       setLoading(false)
     }
-
-    return false
   }
 
   const handleReset = () => {
