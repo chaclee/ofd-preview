@@ -90,65 +90,66 @@ function App() {
   return (
     <Layout className="layout">
       <Header className="header">
-        <div className="logo">
-          <FileTextOutlined style={{ fontSize: '24px', marginRight: '12px' }} />
-          <Title level={3} style={{ margin: 0, color: 'white' }}>
-            OFD 文档预览
-          </Title>
+        <div className="header-content">
+          <div className="logo">
+            <FileTextOutlined style={{ fontSize: '28px' }} />
+            <Title level={3} style={{ margin: 0, color: 'white' }}>
+              OFD 在线预览
+            </Title>
+          </div>
+
+          {fileName && (
+            <div className="header-file-info">
+              <Text style={{ color: 'rgba(255, 255, 255, 0.85)', marginRight: '8px' }}>
+                {fileName}
+              </Text>
+              <Button
+                size="small"
+                icon={<ReloadOutlined />}
+                onClick={handleReset}
+                style={{
+                  background: 'rgba(255, 255, 255, 0.2)',
+                  border: 'none',
+                  color: 'white'
+                }}
+              >
+                重置
+              </Button>
+            </div>
+          )}
         </div>
       </Header>
 
       <Content className="content">
         <div className="content-wrapper">
-          <Card className="upload-card" bordered={false}>
-            <Space direction="vertical" size="large" style={{ width: '100%' }}>
-              <Dragger {...uploadProps}>
+          {!fileName ? (
+            <div className="upload-section">
+              <Dragger {...uploadProps} className="upload-dragger">
                 <p className="ant-upload-drag-icon">
                   <InboxOutlined />
                 </p>
-                <p className="ant-upload-text">点击或拖拽 OFD 文件到此区域</p>
+                <p className="ant-upload-text">点击或拖拽 OFD 文件到此区域上传</p>
                 <p className="ant-upload-hint">
-                  支持 .ofd 格式文件，单次只能上传一个文件
+                  支持 .ofd 格式文件
                 </p>
               </Dragger>
-
-              {fileName && (
-                <div className="file-info">
-                  <Text type="secondary">当前文件: </Text>
-                  <Text strong>{fileName}</Text>
-                  <Button
-                    type="link"
-                    icon={<ReloadOutlined />}
-                    onClick={handleReset}
-                  >
-                    重置
-                  </Button>
-                </div>
-              )}
-            </Space>
-          </Card>
-
-          <Card
-            className="preview-card"
-            bordered={false}
-            title="文档预览"
-          >
-            <Spin spinning={loading} tip="加载中...">
-              <div
-                ref={containerRef}
-                className="ofd-container"
-                style={{ minHeight: '600px' }}
-              />
-            </Spin>
-          </Card>
+            </div>
+          ) : (
+            <Card
+              className="preview-card"
+              bordered={false}
+              bodyStyle={{ padding: '16px' }}
+            >
+              <Spin spinning={loading} tip="加载中...">
+                <div
+                  ref={containerRef}
+                  className="ofd-container"
+                />
+              </Spin>
+            </Card>
+          )}
         </div>
       </Content>
-
-      <Footer className="footer">
-        <Text type="secondary">
-          OFD Preview © {new Date().getFullYear()} - 基于 Ant Design 构建
-        </Text>
-      </Footer>
     </Layout>
   )
 }

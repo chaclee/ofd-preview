@@ -1,79 +1,178 @@
 .layout {
   min-height: 100vh;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #ff6b6b 0%, #ff8e53 50%, #feca57 100%);
 }
 
 .header {
   display: flex;
   align-items: center;
-  background: rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(10px);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  padding: 0 50px;
+  background: rgba(0, 0, 0, 0.25);
+  backdrop-filter: blur(20px);
+  box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+  padding: 0 32px;
+  height: 64px;
+}
+
+.header-content {
+  width: 100%;
+  max-width: 1600px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .logo {
   display: flex;
   align-items: center;
+  gap: 12px;
   color: white;
 }
 
+.header-file-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: rgba(255, 255, 255, 0.15);
+  padding: 8px 16px;
+  border-radius: 8px;
+  backdrop-filter: blur(10px);
+}
+
 .content {
-  padding: 40px 50px;
+  padding: 20px;
+  height: calc(100vh - 64px);
+  overflow: auto;
 }
 
 .content-wrapper {
-  max-width: 1400px;
+  max-width: 1600px;
+  height: 100%;
   margin: 0 auto;
+  display: flex;
+  flex-direction: column;
 }
 
-.upload-card {
-  margin-bottom: 24px;
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-}
-
-.preview-card {
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-}
-
-.file-info {
+/* Upload Section */
+.upload-section {
   display: flex;
   align-items: center;
-  gap: 8px;
-  padding: 12px;
-  background: #f5f5f5;
-  border-radius: 8px;
+  justify-content: center;
+  height: 100%;
+  min-height: 400px;
+}
+
+.upload-dragger {
+  max-width: 600px;
+  width: 100%;
+  background: rgba(255, 255, 255, 0.95) !important;
+  border: 3px dashed rgba(255, 107, 107, 0.3) !important;
+  border-radius: 16px !important;
+  padding: 48px 24px !important;
+  transition: all 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+}
+
+.upload-dragger:hover {
+  border-color: #ff6b6b !important;
+  background: white !important;
+  transform: translateY(-4px);
+  box-shadow: 0 12px 48px rgba(255, 107, 107, 0.2);
+}
+
+.ant-upload-drag-icon {
+  font-size: 64px;
+  color: #ff6b6b;
+  margin-bottom: 16px;
+}
+
+.ant-upload-text {
+  font-size: 18px;
+  font-weight: 600;
+  color: #2c3e50;
+  margin: 16px 0 8px;
+}
+
+.ant-upload-hint {
+  font-size: 14px;
+  color: #7f8c8d;
+}
+
+/* Preview Card */
+.preview-card {
+  flex: 1;
+  height: 100%;
+  border-radius: 16px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+  overflow: hidden;
+  background: white;
 }
 
 .ofd-container {
   width: 100%;
-  background: #f5f5f5;
+  height: 100%;
+  min-height: calc(100vh - 140px);
+  background: #fafafa;
   border-radius: 8px;
   overflow: auto;
+  padding: 16px;
 }
 
-.footer {
-  text-align: center;
-  background: rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(10px);
+/* Responsive */
+@media (max-width: 768px) {
+  .header {
+    padding: 0 16px;
+  }
+
+  .header-content {
+    flex-direction: column;
+    gap: 12px;
+    padding: 8px 0;
+  }
+
+  .header-file-info {
+    font-size: 12px;
+  }
+
+  .content {
+    padding: 12px;
+    height: calc(100vh - 80px);
+  }
+
+  .upload-dragger {
+    max-width: 100%;
+    padding: 32px 16px !important;
+  }
+
+  .ant-upload-drag-icon {
+    font-size: 48px;
+  }
+
+  .ant-upload-text {
+    font-size: 16px;
+  }
+
+  .ofd-container {
+    min-height: calc(100vh - 180px);
+  }
 }
 
-/* Ant Design upload component custom styles */
-.ant-upload-drag {
-  border: 2px dashed #d9d9d9 !important;
-  border-radius: 8px !important;
-  background: #fafafa !important;
-  transition: all 0.3s ease;
+/* Custom scrollbar */
+.ofd-container::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
 }
 
-.ant-upload-drag:hover {
-  border-color: #1890ff !important;
-  background: #e6f7ff !important;
+.ofd-container::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 4px;
 }
 
-.ant-upload-drag-icon {
-  font-size: 48px;
-  color: #1890ff;
+.ofd-container::-webkit-scrollbar-thumb {
+  background: #ff6b6b;
+  border-radius: 4px;
+}
+
+.ofd-container::-webkit-scrollbar-thumb:hover {
+  background: #ff5252;
 }
